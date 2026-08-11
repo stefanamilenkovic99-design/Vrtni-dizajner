@@ -5,21 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vrtni dizajner - Dizajn i uređenje vrtova i zelenih površina</title>
 <meta name="description" content="Projektovanje vrtova, izbor biljaka, 3D vizualizacije i kompletno uređenje privatnih i poslovnih zelenih površina.">
+<meta name="theme-color" content="#394b40" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E2A23" media="(prefers-color-scheme: dark)">
+<script>
+  /* Postavi temu pre prvog iscrtavanja (bez treperenja). */
+  (function(){
+    try{
+      var saved = localStorage.getItem('vd-theme');
+      var dark = saved ? (saved === 'dark')
+                       : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if(dark){ document.documentElement.setAttribute('data-theme','dark'); }
+    }catch(e){}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
+    color-scheme:light;
+
+    /* brend boje */
     --primary:#132B1E;
     --primary-light:#24493a;
+    --on-primary:#ffffff;
+    --secondary:#394b40;
+    --tertiary:#9cb0a4;
+
+    /* površine i tekst */
     --bg:#FAF8F3;
-    --bg-alt:#F0ECE3;
+    --bg-alt:#E9EDE7;
+    --surface:#FAF8F3;
+    --field-bg:#ffffff;
     --text:#22251f;
     --text-soft:#4b4e46;
-    --border:#DCD6C8;
+    --border:#CDD8CF;
+
+    /* akcenti (secondary/tertiary u ulogama) */
+    --accent-text:#394b40;
+    --accent-line:#9cb0a4;
+    --tag-bg:#E2E9E2;
+    --tag-text:#2E3F35;
+    --tag-border:#9cb0a4;
+
+    /* placeholder blokovi */
+    --ph-bg:#DEE5DD;
+    --ph-bg-pre:#D9D5CB;
+    --ph-border:#9cb0a4;
+    --ph-text:#5C6B60;
+
+    /* zaglavlje (glava) */
+    --header-bg:#394b40;
+    --header-text:#F4F7F3;
+    --header-muted:#C9D6CC;
+    --header-border:#9cb0a4;
+    --header-btn-bg:#9cb0a4;
+    --header-btn-text:#132B1E;
+    --toggle-track:rgba(255,255,255,0.18);
+    --toggle-border:rgba(255,255,255,0.32);
+
     --radius:8px;
     --font-head:'Playfair Display', serif;
     --font-body:'Jost', sans-serif;
+  }
+
+  html[data-theme="dark"]{
+    color-scheme:dark;
+
+    --primary:#9CB0A4;
+    --primary-light:#B4C6BA;
+    --on-primary:#10231A;
+    --secondary:#394b40;
+    --tertiary:#9cb0a4;
+
+    --bg:#111512;
+    --bg-alt:#171E19;
+    --surface:#1C231E;
+    --field-bg:#1B211C;
+    --text:#E9EAE4;
+    --text-soft:#B0B5AC;
+    --border:#2E3A32;
+
+    --accent-text:#9cb0a4;
+    --accent-line:#4E6455;
+    --tag-bg:#222C26;
+    --tag-text:#B3C6B9;
+    --tag-border:#4E6455;
+
+    --ph-bg:#1B221D;
+    --ph-bg-pre:#231F1A;
+    --ph-border:#3C4E43;
+    --ph-text:#8C9A90;
+
+    --header-bg:#1E2A23;
+    --header-text:#E9EFE9;
+    --header-muted:#A9BBAE;
+    --header-border:#3C4E43;
+    --header-btn-bg:#9cb0a4;
+    --header-btn-text:#12241A;
+    --toggle-track:rgba(255,255,255,0.10);
+    --toggle-border:rgba(255,255,255,0.20);
+  }
+
+  body, .navbar, .mobile-menu, .section, .hero, footer, .eyebrow,
+  .benefit-card, .proof-card, .step-card, .garancija-box,
+  .placeholder, input, textarea{
+    transition:background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    body, .navbar, .mobile-menu, .section, .hero, footer, .eyebrow,
+    .benefit-card, .proof-card, .step-card, .garancija-box,
+    .placeholder, input, textarea, .theme-toggle, .theme-toggle .knob{
+      transition:none;
+    }
   }
 
   *{box-sizing:border-box;}
@@ -74,13 +173,28 @@
   }
 
   .eyebrow{
-    display:inline-block;
-    font-size:0.8rem;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.76rem;
     letter-spacing:0.12em;
     text-transform:uppercase;
-    color:var(--primary);
+    color:var(--tag-text);
+    background:var(--tag-bg);
+    border:1px solid var(--tag-border);
+    border-radius:999px;
+    padding:6px 14px;
     font-weight:600;
-    margin-bottom:14px;
+    margin-bottom:18px;
+  }
+
+  .eyebrow::before{
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--tertiary);
+    flex:none;
   }
 
   .section-title{
@@ -96,7 +210,7 @@
   .btn{
     display:inline-block;
     background:var(--primary);
-    color:#fff;
+    color:var(--on-primary);
     padding:14px 28px;
     border-radius:var(--radius);
     font-weight:500;
@@ -115,15 +229,15 @@
     border:1px solid var(--primary);
   }
 
-  .btn-outline:hover{background:var(--primary); color:#fff;}
+  .btn-outline:hover{background:var(--primary); color:var(--on-primary);}
 
   /* NAVBAR */
   .navbar{
     position:fixed;
     top:0; left:0; right:0;
     height:78px;
-    background:var(--bg);
-    border-bottom:1px solid var(--border);
+    background:var(--header-bg);
+    border-bottom:2px solid var(--header-border);
     z-index:1000;
   }
 
@@ -135,11 +249,24 @@
   }
 
   .logo{
+    display:inline-flex;
+    align-items:center;
+    gap:11px;
     font-family:var(--font-head);
     font-size:1.35rem;
     font-weight:700;
-    color:var(--primary);
+    color:var(--header-text);
     white-space:nowrap;
+  }
+
+  .logo::before{
+    content:"";
+    width:12px;
+    height:12px;
+    flex:none;
+    background:var(--tertiary);
+    border-radius:50% 0 50% 50%;
+    transform:rotate(45deg);
   }
 
   .nav-links{
@@ -151,13 +278,90 @@
   }
 
   .nav-links a{
+    position:relative;
     font-size:0.96rem;
-    color:var(--text);
+    color:var(--header-muted);
+    padding-bottom:4px;
+    transition:color 0.2s ease;
   }
 
-  .nav-links a:hover{color:var(--primary);}
+  .nav-links a::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:2px;
+    background:var(--tertiary);
+    border-radius:2px;
+    transform:scaleX(0);
+    transform-origin:left center;
+    transition:transform 0.25s ease;
+  }
 
-  .nav-right{display:flex; align-items:center; gap:24px;}
+  .nav-links a:hover{color:var(--header-text);}
+  .nav-links a:hover::after{transform:scaleX(1);}
+
+  /* CTA u zaglavlju koristi tertiary */
+  .navbar .btn, .mobile-menu .btn{
+    background:var(--header-btn-bg);
+    border-color:var(--header-btn-bg);
+    color:var(--header-btn-text);
+  }
+
+  .navbar .btn:hover, .mobile-menu .btn:hover{
+    background:transparent;
+    border-color:var(--header-btn-bg);
+    color:var(--header-btn-bg);
+  }
+
+  .nav-right{display:flex; align-items:center; gap:20px;}
+
+  /* PREKIDAČ TEME */
+  .theme-toggle{
+    position:relative;
+    flex:none;
+    width:46px;
+    height:26px;
+    padding:0;
+    border:1px solid var(--toggle-border);
+    border-radius:999px;
+    background:var(--toggle-track);
+    cursor:pointer;
+    transition:background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .theme-toggle:focus-visible{
+    outline:2px solid var(--tertiary);
+    outline-offset:3px;
+  }
+
+  .theme-toggle .knob{
+    position:absolute;
+    top:2px;
+    left:2px;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:#F5A623;
+    box-shadow:0 1px 3px rgba(0,0,0,0.3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:left 0.25s ease, background 0.25s ease;
+  }
+
+  html[data-theme="dark"] .theme-toggle .knob{
+    left:22px;
+    background:#CFD8E6;
+  }
+
+  .theme-toggle svg{width:13px; height:13px; display:block;}
+  .theme-toggle .icon-moon{display:none;}
+  html[data-theme="dark"] .theme-toggle .icon-sun{display:none;}
+  html[data-theme="dark"] .theme-toggle .icon-moon{display:block;}
+
+  @media (max-width:991px){
+    .nav-right{gap:14px;}
+  }
 
   .hamburger{
     display:none;
@@ -176,7 +380,7 @@
     display:block;
     height:2px;
     width:100%;
-    background:var(--primary);
+    background:var(--header-text);
     transition:transform 0.2s ease, opacity 0.2s ease;
   }
 
@@ -188,8 +392,8 @@
     position:fixed;
     top:78px;
     left:0; right:0;
-    background:var(--bg);
-    border-bottom:1px solid var(--border);
+    background:var(--header-bg);
+    border-bottom:2px solid var(--header-border);
     max-height:0;
     overflow:hidden;
     transition:max-height 0.25s ease;
@@ -207,9 +411,12 @@
 
   .mobile-menu a.mnav{
     font-size:1rem;
-    color:var(--text);
-    padding:6px 0;
+    color:var(--header-muted);
+    padding:8px 0;
+    border-bottom:1px solid rgba(255,255,255,0.10);
   }
+
+  .mobile-menu a.mnav:hover{color:var(--header-text);}
 
   .mobile-menu .btn{text-align:center;}
 
@@ -249,9 +456,9 @@
   }
 
   .placeholder{
-    background:#E4E0D4;
-    border:1px dashed #B7B09A;
-    color:#6b6857;
+    background:var(--ph-bg);
+    border:1px dashed var(--ph-border);
+    color:var(--ph-text);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -327,14 +534,18 @@
 
   .benefit-card{
     border:1px solid var(--border);
+    border-top:3px solid var(--accent-line);
     border-radius:var(--radius);
     padding:28px 24px;
-    background:var(--bg);
+    background:var(--surface);
+    transition:border-color 0.2s ease, background-color 0.3s ease;
   }
+
+  .benefit-card:hover{border-color:var(--tertiary);}
 
   .benefit-card svg{
     width:30px; height:30px;
-    color:var(--primary);
+    color:var(--accent-text);
     margin-bottom:16px;
   }
 
@@ -359,7 +570,7 @@
   /* DOKAZI */
   .proof-grid{
     display:grid;
-    grid-template-columns:repeat(3, 1fr);
+    grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
     gap:28px;
     margin-top:12px;
   }
@@ -368,25 +579,129 @@
     border:1px solid var(--border);
     border-radius:var(--radius);
     overflow:hidden;
-    background:var(--bg);
+    background:var(--surface);
+    transition:border-color 0.2s ease, background-color 0.3s ease;
   }
 
-  .proof-images{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+  .proof-card:hover{border-color:var(--tertiary);}
+
+  /* KLIZAČ PRE / POSLE */
+  .ba{
+    position:relative;
+    height:clamp(240px, 26vw, 300px);
+    overflow:hidden;
+    background:var(--ph-bg);
+    cursor:ew-resize;
+    touch-action:pan-y;
+    user-select:none;
+    -webkit-user-select:none;
   }
 
-  .proof-images .placeholder{
-    height:150px;
-    border-radius:0;
+  .ba:focus-visible{
+    outline:3px solid var(--tertiary);
+    outline-offset:-3px;
+  }
+
+  .ba-layer{position:absolute; inset:0;}
+
+  .ba-layer .placeholder{
+    height:100%;
     border:none;
-    border-right:1px dashed #B7B09A;
+    border-radius:0;
+    align-items:flex-end;
+    justify-content:flex-start;
+    text-align:left;
+    padding:0 20px 20px;
+    font-size:0.78rem;
   }
 
-  .proof-images .placeholder:last-child{border-right:none;}
+  .ba-layer:not(.ba-before) .placeholder{
+    justify-content:flex-end;
+    text-align:right;
+  }
+
+  .ba-layer img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .ba-before{clip-path:inset(0 50% 0 0);}
+
+  .ba-before .placeholder{background:var(--ph-bg-pre);}
+
+  .ba-tag{
+    position:absolute;
+    top:14px;
+    z-index:3;
+    font-size:0.68rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:5px 12px;
+    border-radius:999px;
+    pointer-events:none;
+  }
+
+  .ba-tag-pre{
+    left:14px;
+    background:var(--secondary);
+    color:#F4F7F3;
+  }
+
+  .ba-tag-posle{
+    right:14px;
+    background:var(--tertiary);
+    color:#132B1E;
+  }
+
+  .ba-line{
+    position:absolute;
+    top:0; bottom:0;
+    left:50%;
+    width:2px;
+    margin-left:-1px;
+    background:var(--tertiary);
+    box-shadow:0 0 0 1px rgba(19,43,30,0.18);
+    z-index:2;
+    pointer-events:none;
+  }
+
+  .ba-grip{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--tertiary);
+    color:#132B1E;
+    border:2px solid var(--surface);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 6px 16px rgba(19,43,30,0.30);
+    z-index:3;
+    pointer-events:none;
+  }
+
+  .ba-grip svg{width:20px; height:20px;}
+
+  .ba-hint{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.86rem;
+    color:var(--text-soft);
+    margin-top:14px;
+  }
+
+  .ba-hint svg{width:17px; height:17px; color:var(--accent-text); flex:none;}
 
   .proof-caption{
     padding:16px 18px;
+    border-top:2px solid var(--accent-line);
   }
 
   .proof-caption p{margin:0; font-size:0.9rem;}
@@ -423,15 +738,22 @@
     border:1px solid var(--border);
     border-radius:var(--radius);
     padding:26px 22px;
-    background:var(--bg);
+    background:var(--surface);
   }
 
   .step-num{
     font-family:var(--font-head);
-    font-size:1.6rem;
-    color:var(--primary);
-    margin-bottom:12px;
-    display:block;
+    font-size:1.1rem;
+    font-weight:700;
+    color:#132B1E;
+    background:var(--tertiary);
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:16px;
   }
 
   .step-card h3{
@@ -461,6 +783,7 @@
 
   .garancija-box{
     border:1px solid var(--border);
+    border-left:4px solid var(--tertiary);
     border-radius:var(--radius);
     padding:40px;
     background:var(--bg-alt);
@@ -515,13 +838,14 @@
     border-radius:var(--radius);
     font-family:var(--font-body);
     font-size:0.98rem;
-    background:#fff;
+    background:var(--field-bg);
     color:var(--text);
   }
 
   input:focus, textarea:focus{
     outline:none;
-    border-color:var(--primary);
+    border-color:var(--accent-text);
+    box-shadow:0 0 0 3px var(--tag-bg);
   }
 
   textarea{resize:vertical; min-height:120px;}
@@ -534,6 +858,8 @@
   footer{
     padding-top:56px;
     padding-bottom:40px;
+    background:var(--bg-alt);
+    border-top:2px solid var(--accent-line);
   }
 
   .footer-grid{
@@ -546,11 +872,24 @@
   }
 
   .footer-logo{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
     font-family:var(--font-head);
     font-size:1.3rem;
     color:var(--primary);
     font-weight:700;
     margin-bottom:10px;
+  }
+
+  .footer-logo::before{
+    content:"";
+    width:11px;
+    height:11px;
+    flex:none;
+    background:var(--tertiary);
+    border-radius:50% 0 50% 50%;
+    transform:rotate(45deg);
   }
 
   .footer-col p{font-size:0.9rem; margin-bottom:0;}
@@ -562,7 +901,7 @@
   }
 
   .footer-links a{font-size:0.9rem; color:var(--text-soft);}
-  .footer-links a:hover{color:var(--primary);}
+  .footer-links a:hover{color:var(--accent-text);}
 
   .footer-bottom{
     display:flex;
@@ -580,7 +919,7 @@
     text-align:center;
     font-size:0.92rem;
     color:var(--text-soft);
-    border-top:1px solid var(--border);
+    border-top:1px solid var(--accent-line);
     padding-top:28px;
   }
 
@@ -599,6 +938,12 @@
       <a href="#kontakt">Kontakt</a>
     </nav>
     <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Uključi tamnu temu" title="Svetla / tamna tema">
+        <span class="knob">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="#7a4c05" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.6" fill="#7a4c05" stroke="none"/><path d="M12 1.6v2.4M12 20v2.4M3.9 3.9l1.7 1.7M18.4 18.4l1.7 1.7M1.6 12h2.4M20 12h2.4M3.9 20.1l1.7-1.7M18.4 5.6l1.7-1.7"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.4 3a9.6 9.6 0 1 0 3.6 15.2A11.4 11.4 0 0 1 17.4 3z" fill="#3d4a5c"/></svg>
+        </span>
+      </button>
       <a href="#kontakt" class="btn">Zatraži ponudu</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Otvori meni" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -718,29 +1063,74 @@
   <div class="wrap">
     <span class="eyebrow">Dokazi</span>
     <h2 class="section-title">Vrtovi koji su već zaživeli</h2>
-    <p class="section-intro">Deo projekata koje sam dizajnirala i sprovela, od prve skice do zasađenog vrta u kom klijenti danas provode vreme.</p>
+    <p class="section-intro">Deo projekata koje sam dizajnirala i sprovela, od prve skice do zasađenog vrta u kom klijenti danas provode vreme. Prevuci klizač preko slike i vidi isto dvorište pre i posle uređenja.</p>
     <div class="proof-grid">
+
+      <!-- Za pravu fotografiju zameni <div class="placeholder">...</div> sa <img src="assets/ime.jpg" alt="..."> -->
       <div class="proof-card">
-        <div class="proof-images">
-          <div class="placeholder" role="img" aria-label="Fotografija prednjeg dvorišta pre uređenja">PRE</div>
-          <div class="placeholder" role="img" aria-label="Fotografija prednjeg dvorišta posle uređenja">POSLE</div>
+        <div class="ba" data-ba tabindex="0" role="slider"
+             aria-label="Poređenje pre i posle: prednje dvorište porodične kuće"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+          <div class="ba-layer">
+            <div class="placeholder" role="img" aria-label="Prednje dvorište posle uređenja">posle uređenja</div>
+          </div>
+          <div class="ba-layer ba-before" data-ba-before>
+            <div class="placeholder" role="img" aria-label="Prednje dvorište pre uređenja">pre uređenja</div>
+          </div>
+          <span class="ba-tag ba-tag-pre">Pre</span>
+          <span class="ba-tag ba-tag-posle">Posle</span>
+          <div class="ba-line" data-ba-line></div>
+          <div class="ba-grip" data-ba-grip aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-5 6 5 6"/><path d="M15 6l5 6-5 6"/></svg>
+          </div>
         </div>
         <div class="proof-caption"><p>Prednje dvorište porodične kuće - novi raspored biljaka i staza.</p></div>
       </div>
+
       <div class="proof-card">
-        <div class="proof-images">
-          <div class="placeholder" role="img" aria-label="Fotografija bašte uz terasu pre uređenja">PRE</div>
-          <div class="placeholder" role="img" aria-label="Fotografija bašte uz terasu posle uređenja">POSLE</div>
+        <div class="ba" data-ba tabindex="0" role="slider"
+             aria-label="Poređenje pre i posle: bašta uz terasu"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+          <div class="ba-layer">
+            <div class="placeholder" role="img" aria-label="Bašta uz terasu posle uređenja">posle uređenja</div>
+          </div>
+          <div class="ba-layer ba-before" data-ba-before>
+            <div class="placeholder" role="img" aria-label="Bašta uz terasu pre uređenja">pre uređenja</div>
+          </div>
+          <span class="ba-tag ba-tag-pre">Pre</span>
+          <span class="ba-tag ba-tag-posle">Posle</span>
+          <div class="ba-line" data-ba-line></div>
+          <div class="ba-grip" data-ba-grip aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-5 6 5 6"/><path d="M15 6l5 6-5 6"/></svg>
+          </div>
         </div>
-        <div class="proof-caption"><p>Bašta uz terasu - zonа za sedenje uklopljena u zelenilo.</p></div>
+        <div class="proof-caption"><p>Bašta uz terasu - zona za sedenje uklopljena u zelenilo.</p></div>
       </div>
+
       <div class="proof-card">
-        <div class="proof-images">
-          <div class="placeholder" role="img" aria-label="Fotografija ulazne zone poslovnog prostora pre uređenja">PRE</div>
-          <div class="placeholder" role="img" aria-label="Fotografija ulazne zone poslovnog prostora posle uređenja">POSLE</div>
+        <div class="ba" data-ba tabindex="0" role="slider"
+             aria-label="Poređenje pre i posle: ulazna zona poslovnog objekta"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+          <div class="ba-layer">
+            <div class="placeholder" role="img" aria-label="Ulazna zona poslovnog objekta posle uređenja">posle uređenja</div>
+          </div>
+          <div class="ba-layer ba-before" data-ba-before>
+            <div class="placeholder" role="img" aria-label="Ulazna zona poslovnog objekta pre uređenja">pre uređenja</div>
+          </div>
+          <span class="ba-tag ba-tag-pre">Pre</span>
+          <span class="ba-tag ba-tag-posle">Posle</span>
+          <div class="ba-line" data-ba-line></div>
+          <div class="ba-grip" data-ba-grip aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-5 6 5 6"/><path d="M15 6l5 6-5 6"/></svg>
+          </div>
         </div>
         <div class="proof-caption"><p>Ulazna zona poslovnog objekta - jasan raspored i niže održavanje.</p></div>
       </div>
+    </div>
+
+    <div class="ba-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l-5 6 5 6"/><path d="M15 6l5 6-5 6"/></svg>
+      <span>Prevuci klizač levo i desno (ili koristi strelice na tastaturi) da uporediš stanje pre i posle.</span>
     </div>
   </div>
 </section>
@@ -859,6 +1249,142 @@
 </footer>
 
 <script>
+  const themeToggle = document.getElementById('themeToggle');
+  const rootEl = document.documentElement;
+
+  function isDark(){
+    return rootEl.getAttribute('data-theme') === 'dark';
+  }
+
+  function syncToggle(){
+    const dark = isDark();
+    themeToggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    themeToggle.setAttribute('aria-label', dark ? 'Uključi svetlu temu' : 'Uključi tamnu temu');
+  }
+
+  syncToggle();
+
+  themeToggle.addEventListener('click', function(){
+    const dark = isDark();
+    if(dark){
+      rootEl.removeAttribute('data-theme');
+    }else{
+      rootEl.setAttribute('data-theme','dark');
+    }
+    try{
+      localStorage.setItem('vd-theme', dark ? 'light' : 'dark');
+    }catch(e){}
+    syncToggle();
+  });
+
+  /* KLIZAČ PRE / POSLE */
+  document.querySelectorAll('[data-ba]').forEach(function(box, index){
+    const before = box.querySelector('[data-ba-before]');
+    const line = box.querySelector('[data-ba-line]');
+    const grip = box.querySelector('[data-ba-grip]');
+    if(!before || !line || !grip){ return; }
+
+    let pct = 50;
+    let active = false, decided = false, dragging = false, hinted = false;
+    let startX = 0, startY = 0;
+
+    function clampPct(value){
+      return Math.max(4, Math.min(96, value));
+    }
+
+    function setPct(value){
+      pct = clampPct(value);
+      before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+      line.style.left = pct + '%';
+      grip.style.left = pct + '%';
+      box.setAttribute('aria-valuenow', Math.round(pct));
+      box.setAttribute('aria-valuetext', 'Prikazano ' + Math.round(pct) + ' odsto stanja pre uređenja');
+    }
+
+    function pctFromX(clientX){
+      const rect = box.getBoundingClientRect();
+      return (clientX - rect.left) / rect.width * 100;
+    }
+
+    function clearTransition(){
+      before.style.transition = '';
+      line.style.transition = '';
+      grip.style.transition = '';
+    }
+
+    box.addEventListener('pointerdown', function(e){
+      active = true; decided = false; dragging = false; hinted = true;
+      startX = e.clientX; startY = e.clientY;
+      clearTransition();
+      /* Miš: kreni odmah. Dodir: prvo prepoznaj smer pokreta. */
+      if(e.pointerType !== 'touch'){
+        decided = true;
+        dragging = true;
+        setPct(pctFromX(e.clientX));
+      }
+    });
+
+    window.addEventListener('pointermove', function(e){
+      if(!active){ return; }
+      if(!decided){
+        const dx = Math.abs(e.clientX - startX);
+        const dy = Math.abs(e.clientY - startY);
+        if(dx < 8 && dy < 8){ return; }
+        decided = true;
+        dragging = dx > dy;   /* vodoravno = klizač, uspravno = skrol strane */
+        if(!dragging){ return; }
+      }
+      setPct(pctFromX(e.clientX));
+      if(e.cancelable){ e.preventDefault(); }
+    }, {passive:false});
+
+    function stopDrag(){
+      active = false; decided = false; dragging = false;
+    }
+
+    window.addEventListener('pointerup', stopDrag);
+    window.addEventListener('pointercancel', stopDrag);
+
+    box.addEventListener('keydown', function(e){
+      const step = e.shiftKey ? 10 : 4;
+      if(e.key === 'ArrowLeft'){ setPct(pct - step); }
+      else if(e.key === 'ArrowRight'){ setPct(pct + step); }
+      else if(e.key === 'Home'){ setPct(0); }
+      else if(e.key === 'End'){ setPct(100); }
+      else { return; }
+      hinted = true;
+      clearTransition();
+      e.preventDefault();
+    });
+
+    setPct(50);
+
+    /* Kratka najava pokreta na prvom klizaču, kad uđe u vidno polje. */
+    function runHint(){
+      if(hinted || dragging){ return; }
+      hinted = true;
+      const ease = '0.7s cubic-bezier(.4,0,.2,1)';
+      before.style.transition = 'clip-path ' + ease;
+      line.style.transition = 'left ' + ease;
+      grip.style.transition = 'left ' + ease;
+      setPct(28);
+      setTimeout(function(){ setPct(50); }, 760);
+      setTimeout(clearTransition, 1600);
+    }
+
+    if(index === 0 && typeof IntersectionObserver !== 'undefined'
+       && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(!entry.isIntersecting){ return; }
+          observer.disconnect();
+          setTimeout(runHint, 150);
+        });
+      }, {threshold:0.25});
+      observer.observe(box);
+    }
+  });
+
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
 
