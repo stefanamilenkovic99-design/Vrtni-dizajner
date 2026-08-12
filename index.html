@@ -5,16 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vrtni dizajner - Dizajn i uređenje vrtova i zelenih površina</title>
 <meta name="description" content="Projektovanje vrtova, izbor biljaka, 3D vizualizacije i kompletno uređenje privatnih i poslovnih zelenih površina.">
-<meta name="theme-color" content="#394b40" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1E2A23" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" id="themeColorMeta" content="#394b40">
 <script>
-  /* Postavi temu pre prvog iscrtavanja (bez treperenja). */
+  /* Sajt je uvek svetao; tamna tema samo ako je posetilac sam uključi. */
   (function(){
     try{
-      var saved = localStorage.getItem('vd-theme');
-      var dark = saved ? (saved === 'dark')
-                       : window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if(dark){ document.documentElement.setAttribute('data-theme','dark'); }
+      if(localStorage.getItem('vd-theme') === 'dark'){
+        document.documentElement.setAttribute('data-theme','dark');
+      }
     }catch(e){}
   })();
 </script>
@@ -470,6 +468,21 @@
     border-radius:var(--radius);
   }
 
+  .media-frame{
+    position:relative;
+    overflow:hidden;
+    border-radius:var(--radius);
+    border:1px solid var(--border);
+    background:var(--ph-bg);
+  }
+
+  .media{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
   .hero-image{height:420px;}
 
   @media (max-width:768px){
@@ -488,8 +501,69 @@
 
   .problem-grid p{max-width:52ch;}
 
+  .problem-close{
+    border-left:3px solid var(--tertiary);
+    padding-left:18px;
+    margin-top:26px;
+    margin-bottom:0;
+    color:var(--text);
+    font-size:1.05rem;
+  }
+
+  .problem-card{
+    border:1px solid var(--border);
+    border-top:3px solid var(--accent-line);
+    border-radius:var(--radius);
+    background:var(--surface);
+    padding:30px 28px;
+    transition:border-color 0.2s ease, background-color 0.3s ease;
+  }
+
+  .problem-card h3{
+    font-family:var(--font-body);
+    font-size:1.02rem;
+    font-weight:600;
+    color:var(--text);
+    margin-bottom:22px;
+  }
+
+  .problem-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .problem-list li{
+    display:flex;
+    align-items:flex-start;
+    gap:13px;
+    font-size:0.96rem;
+    line-height:1.55;
+    color:var(--text-soft);
+  }
+
+  .problem-mark{
+    flex:none;
+    width:24px;
+    height:24px;
+    margin-top:2px;
+    border-radius:50%;
+    background:var(--tag-bg);
+    border:1px solid var(--tag-border);
+    color:var(--accent-text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .problem-mark svg{width:12px; height:12px;}
+
   @media (max-width:768px){
     .problem-grid{grid-template-columns:1fr;}
+    .problem-card{padding:26px 22px;}
   }
 
   /* RESENJE */
@@ -628,7 +702,11 @@
 
   .ba-before{clip-path:inset(0 50% 0 0);}
 
-  .ba-before .placeholder{background:var(--ph-bg-pre);}
+  .ba-before .placeholder{
+    background:var(--ph-bg-pre);
+    outline:1px dashed var(--ph-border);
+    outline-offset:-14px;
+  }
 
   .ba-tag{
     position:absolute;
@@ -795,19 +873,94 @@
     .garancija-box{padding:28px 22px;}
   }
 
-  /* UPOZORENJE */
-  #upozorenje .wrap{
+  /* UPOZORENJE - istaknut blok */
+  .cta-box{
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     text-align:center;
+    border:1px solid var(--secondary);
+    border-radius:22px;
+    padding:clamp(44px, 6vw, 80px) clamp(26px, 5vw, 64px);
+    background:radial-gradient(120% 120% at 50% 0%, #2C4235 0%, #132B1E 68%);
   }
-  #upozorenje .section-title{
+
+  html[data-theme="dark"] .cta-box{
+    border-color:#3C4E43;
+    background:radial-gradient(120% 120% at 50% 0%, #23322A 0%, #101711 70%);
+  }
+
+  .cta-box::after{
+    content:"";
+    position:absolute;
+    right:-70px;
+    bottom:-90px;
+    width:260px;
+    height:260px;
+    border-radius:50% 0 50% 50%;
+    background:var(--tertiary);
+    opacity:0.07;
+    transform:rotate(45deg);
+    pointer-events:none;
+  }
+
+  .cta-box > *{position:relative; z-index:1;}
+
+  .cta-box .eyebrow{
+    background:rgba(156,176,164,0.16);
+    border-color:rgba(156,176,164,0.45);
+    color:#D9E3DB;
+  }
+
+  .cta-box h2{
+    color:#F4F7F3;
+    font-size:clamp(1.9rem, 3.4vw, 2.6rem);
+    max-width:22ch;
+    margin-bottom:20px;
+  }
+
+  .cta-box p{
+    color:#C3D1C6;
+    max-width:58ch;
     margin-left:auto;
     margin-right:auto;
   }
 
-  .warning-box{
-    max-width:630px;
-    margin-left:auto;
-    margin-right:auto;
+  .cta-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-top:22px;
+  }
+
+  .cta-row .btn{
+    background:var(--tertiary);
+    border-color:var(--tertiary);
+    color:#132B1E;
+    padding:16px 32px;
+    font-size:1.02rem;
+  }
+
+  .cta-row .btn:hover{
+    background:transparent;
+    color:var(--tertiary);
+    border-color:var(--tertiary);
+  }
+
+  .cta-note{
+    font-size:0.9rem;
+    color:#A9BCAE;
+    max-width:34ch;
+    text-align:left;
+  }
+
+  @media (max-width:640px){
+    .cta-note{text-align:center;}
+    .cta-row .btn{width:100%;}
   }
 
   /* KONTAKT */
@@ -970,7 +1123,10 @@
       <p class="hero-sub">Projektujem i uređujem vrtove i zelene površine za kuće, vile, vikendice i poslovne objekte - od prve ideje, preko 3D vizualizacije, do zasađene poslednje biljke.</p>
       <a href="#kontakt" class="btn">Zatraži ponudu za svoj vrt</a>
     </div>
-    <div class="placeholder hero-image" aria-hidden="true">FOTOGRAFIJA UREĐENOG VRTA SA TERASOM</div>
+    <div class="media-frame hero-image">
+      <img class="media" src="assets/hero-vrt.jpg" width="942" height="1142" fetchpriority="high" decoding="async"
+           alt="Uređeno dvorište sa travnjakom, gazištima i mladim drvoredom">
+    </div>
   </div>
 </section>
 
@@ -979,13 +1135,35 @@
     <span class="eyebrow">Problem</span>
     <h2 class="section-title">Dvorište koje gledaš svaki dan, a ne znaš šta s njim</h2>
     <div class="problem-grid">
-      <div>
+      <div class="problem-text">
         <p>Ujutru pogledaš kroz prozor u parče zemlje koje ništa ne govori. Trava neravnomerno raste, ćošak pun korova, terasa gleda u prazan zid.</p>
         <p>Kupio si nekoliko biljaka iz rasadnika i posadio ih onako kako si mislio da izgleda lepo. Do proleća je pola njih uvenulo, jer im to mesto i to sunce nisu odgovarali.</p>
+        <p class="problem-close">Prolaze meseci, pa godine, a dvorište ostaje isto. Prostor koji bi mogao da koristiš za ručak napolju, decu ili opuštanje uveče stoji neiskorišćen.</p>
       </div>
-      <div>
-        <p>Prolaze meseci, pa godine. Prostor koji bi mogao da koristiš za ručak napolju, decu ili opuštanje uveče ostaje neiskorišćen, mesto koje izbegavaš da pokažeš gostima.</p>
-        <p>Svaki put kad pomisliš da nešto promeniš, stane te pitanje odakle da počneš. Koje biljke idu zajedno, gde staza treba da vodi, kako da terasa i zelenilo funkcionišu kao jedna celina.</p>
+      <div class="problem-card">
+        <h3>Šta se ponavlja svake sezone</h3>
+        <ul class="problem-list">
+          <li>
+            <span class="problem-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <span>Trava raste neravnomerno, a ćošak svake godine zaraste u korov.</span>
+          </li>
+          <li>
+            <span class="problem-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <span>Biljke birane napamet uvenu do proleća, jer im tlo i sunce ne odgovaraju.</span>
+          </li>
+          <li>
+            <span class="problem-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <span>Terasa gleda u prazan zid, bez zaklona, senke i zelenila oko sebe.</span>
+          </li>
+          <li>
+            <span class="problem-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <span>Dvorište koje izbegavaš da pokažeš gostima, iako ga gledaš svaki dan.</span>
+          </li>
+          <li>
+            <span class="problem-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <span>Svaki plan stane na pitanju odakle početi: koje biljke, gde staza, kako celina.</span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -995,7 +1173,10 @@
   <div class="wrap">
     <span class="eyebrow">Rešenje</span>
     <div class="resenje-grid">
-      <div class="placeholder resenje-image" aria-hidden="true">3D VIZUALIZACIJA PREDLOGA VRTA</div>
+      <div class="media-frame resenje-image">
+        <img class="media" src="assets/resenje-zasad.jpg" width="794" height="1400" loading="lazy" decoding="async"
+             alt="Ulazni plato sa okruglim žardinjerama i oblikovanim zelenilom">
+      </div>
       <div class="resenje-text">
         <h2 class="section-title">Tu prestaje nagađanje, počinje plan</h2>
         <p>Umesto da sam biraš biljke i nadaš se da će uspeti, radim s tobom od prve ideje do gotovog vrta. Analiziram prostor, tlo, sunce i tvoje potrebe, pa pravim dizajn koji ima smisla za tvoju kuću, tvoju klimu i tvoj način života.</p>
@@ -1014,7 +1195,10 @@
         <p>Radim u oblasti pejzažne arhitekture i hortikulture i dizajnirala sam vrtove za privatne kuće, vile, vikendice i poslovne objekte različitih veličina i namena.</p>
         <p>Svaki predlog biljaka i materijala biram prema tlu, klimi i osvetljenju konkretnog prostora, ne po trenutnom trendu, tako da vrt izgleda dobro i za pet godina, ne samo prvog proleća.</p>
       </div>
-      <div class="placeholder kred-image" aria-hidden="true">FOTOGRAFIJA DIZAJNERA NA TERENU</div>
+      <div class="media-frame kred-image">
+        <img class="media" src="assets/kredibilitet-zasad.jpg" width="942" height="1162" loading="lazy" decoding="async"
+             alt="Zasad uz fasadu objekta - drvo u krošnji, šimšir i lavanda">
+      </div>
     </div>
   </div>
 </section>
@@ -1072,7 +1256,8 @@
              aria-label="Poređenje pre i posle: prednje dvorište porodične kuće"
              aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
           <div class="ba-layer">
-            <div class="placeholder" role="img" aria-label="Prednje dvorište posle uređenja">posle uređenja</div>
+            <img class="media" src="assets/dokazi-dvoriste.jpg" width="802" height="1400" loading="lazy" decoding="async"
+                 alt="Prednje dvorište sa belim oblutkom, oblikovanim šimširom i magnolijom">
           </div>
           <div class="ba-layer ba-before" data-ba-before>
             <div class="placeholder" role="img" aria-label="Prednje dvorište pre uređenja">pre uređenja</div>
@@ -1092,7 +1277,8 @@
              aria-label="Poređenje pre i posle: bašta uz terasu"
              aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
           <div class="ba-layer">
-            <div class="placeholder" role="img" aria-label="Bašta uz terasu posle uređenja">posle uređenja</div>
+            <img class="media" src="assets/dokazi-terasa.jpg" width="942" height="1209" loading="lazy" decoding="async"
+                 alt="Lovor u terakota posudi uz terasu i travnjak">
           </div>
           <div class="ba-layer ba-before" data-ba-before>
             <div class="placeholder" role="img" aria-label="Bašta uz terasu pre uređenja">pre uređenja</div>
@@ -1112,7 +1298,8 @@
              aria-label="Poređenje pre i posle: ulazna zona poslovnog objekta"
              aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
           <div class="ba-layer">
-            <div class="placeholder" role="img" aria-label="Ulazna zona poslovnog objekta posle uređenja">posle uređenja</div>
+            <img class="media" src="assets/dokazi-poslovni.jpg" width="816" height="1400" loading="lazy" decoding="async"
+                 alt="Ulazna zona poslovnog objekta sa žardinjerama, šimširom i lavandom">
           </div>
           <div class="ba-layer ba-before" data-ba-before>
             <div class="placeholder" role="img" aria-label="Ulazna zona poslovnog objekta pre uređenja">pre uređenja</div>
@@ -1182,11 +1369,15 @@
 
 <section class="section alt" id="upozorenje">
   <div class="wrap">
-    <span class="eyebrow">Ako ništa ne promeniš</span>
-    <h2 class="section-title">Šta ostaje isto za šest meseci</h2>
-    <div class="warning-box">
+    <div class="cta-box">
+      <span class="eyebrow">Ako ništa ne promeniš</span>
+      <h2>Šta ostaje isto za šest meseci</h2>
       <p>Dvorište će izgledati skoro isto kao danas. Ista trava, ista praznina pored terase, ista neodlučnost svaki put kad pomisliš da nešto posadiš.</p>
-      <p>Cena čekanja nije novac, već sezone koje prolaze bez vrta u kom bi mogao da sediš uveče.</p>
+      <p>Cena čekanja nije novac, već sezone koje prolaze bez vrta u kom bi mogao da sediš uveče. Sadnja ima svoje termine, pa svaki propušten mesec pomera gotov vrt za celu sezonu.</p>
+      <div class="cta-row">
+        <a href="#kontakt" class="btn">Zatraži ponudu za svoj vrt</a>
+        <span class="cta-note">Prva konsultacija je bez obaveze - dogovaramo obilazak i pričamo o prostoru.</span>
+      </div>
     </div>
   </div>
 </section>
@@ -1256,10 +1447,15 @@
     return rootEl.getAttribute('data-theme') === 'dark';
   }
 
+  const themeColorMeta = document.getElementById('themeColorMeta');
+
   function syncToggle(){
     const dark = isDark();
     themeToggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
     themeToggle.setAttribute('aria-label', dark ? 'Uključi svetlu temu' : 'Uključi tamnu temu');
+    if(themeColorMeta){
+      themeColorMeta.setAttribute('content', dark ? '#1E2A23' : '#394b40');
+    }
   }
 
   syncToggle();
