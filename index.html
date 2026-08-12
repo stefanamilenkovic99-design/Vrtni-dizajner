@@ -252,10 +252,8 @@
   }
 
   .navbar.scrolled, .navbar.menu-open{
-    background:var(--header-glass);
-    border-bottom-color:var(--header-glass-border);
-    -webkit-backdrop-filter:blur(16px) saturate(1.1);
-    backdrop-filter:blur(16px) saturate(1.1);
+    background:var(--header-bg);
+    border-bottom-color:var(--header-border);
   }
 
   .nav-inner{
@@ -454,18 +452,16 @@
     .mobile-menu{display:none;}
   }
 
-  /* HERO - fotografija preko cele širine, leva polovina zamućena i zatamnjena.
-     Naslov prelazi preko granice: na panelu je prigušen, na oštroj fotografiji beo. */
+  /* HERO - fotografija preko cele širine, sav tekst centriran preko nje. */
   .hero{
-    --hero-split:46%;
     position:relative;
     display:flex;
     align-items:center;
-    --hero-pad-top:166px;
-    --hero-pad-bottom:88px;
+    justify-content:center;
+    text-align:center;
     min-height:clamp(620px, 92vh, 900px);
-    padding-top:var(--hero-pad-top);
-    padding-bottom:var(--hero-pad-bottom);
+    padding-top:166px;
+    padding-bottom:88px;
     overflow:hidden;
     background:#0F1A13;
     border-bottom:1px solid var(--border);
@@ -477,43 +473,19 @@
     width:100%;
     height:100%;
     object-fit:cover;
+    /* Isečak pomeren naniže, da u kadar uđu i dvorište i travnjak. */
+    object-position:center 62%;
     z-index:0;
   }
 
-  /* Matirano staklo preko leve polovine - fotografija se vidi kroz zamućenje. */
-  .hero-panel{
-    position:absolute;
-    left:0;
-    top:0;
-    bottom:0;
-    width:var(--hero-split);
-    z-index:1;
-    background:linear-gradient(90deg, rgba(9,22,15,0.60) 0%, rgba(9,22,15,0.44) 55%, rgba(9,22,15,0.30) 100%);
-    -webkit-backdrop-filter:blur(22px) saturate(1.15);
-    backdrop-filter:blur(22px) saturate(1.15);
-    border-right:1px solid rgba(255,255,255,0.26);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.12),
-      22px 0 70px rgba(0,0,0,0.30);
-  }
-
-  /* Odsjaj uz samu ivicu stakla. */
-  .hero-panel::after{
-    content:"";
-    position:absolute;
-    top:0;
-    bottom:0;
-    right:0;
-    width:120px;
-    background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.09) 100%);
-  }
-
-  /* Blago zatamnjenje oštre strane, da beli naslov ostane čitljiv. */
+  /* Preliv preko fotografije, da tekst ostane čitljiv. */
   .hero-veil{
     position:absolute;
     inset:0;
     z-index:1;
-    background:linear-gradient(180deg, rgba(9,20,14,0.36) 0%, rgba(9,20,14,0.14) 45%, rgba(9,20,14,0.58) 100%);
+    background:
+      radial-gradient(110% 80% at 50% 48%, rgba(9,22,15,0.34) 0%, rgba(9,22,15,0.58) 58%, rgba(7,17,11,0.74) 100%),
+      linear-gradient(180deg, rgba(9,20,14,0.46) 0%, rgba(9,20,14,0.22) 45%, rgba(9,20,14,0.66) 100%);
   }
 
   .hero-content{
@@ -522,29 +494,10 @@
     width:100%;
   }
 
-  /* Kopija sadržaja u belom, isečena desno od granice panela (pravi je JS). */
-  .hero-content-bright{
-    position:absolute;
-    inset:0;
-    z-index:4;
-    display:flex;
-    align-items:center;
-    pointer-events:none;
-    clip-path:inset(0 0 0 var(--hero-split));
-    /* Isti unutrašnji razmak kao hero, inače se kopija ne poklopi po visini. */
-    padding-top:var(--hero-pad-top);
-    padding-bottom:var(--hero-pad-bottom);
+  .hero-copy{
+    max-width:860px;
+    margin:0 auto;
   }
-
-  /* Bez ovoga bi auto margine centrirale kopiju u flex sloju i slova se ne bi poklopila. */
-  .hero-content-bright > .wrap{width:100%;}
-
-  .hero-content-bright .ht-big{
-    color:#FFFFFF;
-    text-shadow:0 2px 30px rgba(0,0,0,0.45);
-  }
-
-  .hero-copy{max-width:min(500px, 39vw);}
 
   .hero-eyebrow{
     display:inline-flex;
@@ -554,10 +507,11 @@
     letter-spacing:0.20em;
     text-transform:uppercase;
     color:#9CB0A4;
-    margin-bottom:20px;
+    margin-bottom:22px;
   }
 
-  .hero-eyebrow::before{
+  .hero-eyebrow::before,
+  .hero-eyebrow::after{
     content:"";
     width:34px;
     height:1px;
@@ -569,18 +523,18 @@
     margin-bottom:26px;
     display:flex;
     flex-direction:column;
-    gap:10px;
+    align-items:center;
+    gap:12px;
   }
 
-  /* Veliki red ide preko granice panela, zato bez preloma. */
   .ht-big{
     display:block;
-    white-space:nowrap;
-    font-size:clamp(3rem, 8.4vw, 7rem);
-    line-height:0.98;
+    font-size:clamp(2.6rem, 6.4vw, 5.4rem);
+    line-height:1.02;
     letter-spacing:-0.01em;
     text-transform:uppercase;
-    color:rgba(255,255,255,0.30);
+    color:#FFFFFF;
+    text-shadow:0 2px 30px rgba(0,0,0,0.45);
   }
 
   .ht-small{
@@ -590,20 +544,23 @@
     font-size:clamp(1.05rem, 1.5vw, 1.35rem);
     line-height:1.4;
     letter-spacing:0.01em;
-    color:#FFFFFF;
-    max-width:26ch;
+    color:rgba(255,255,255,0.94);
+    max-width:32ch;
+    text-shadow:0 1px 18px rgba(0,0,0,0.45);
   }
 
   .hero-sub{
-    color:rgba(255,255,255,0.82);
-    font-size:1.02rem;
-    max-width:44ch;
+    color:rgba(255,255,255,0.86);
+    font-size:1.06rem;
+    max-width:58ch;
+    text-shadow:0 1px 16px rgba(0,0,0,0.45);
     margin:0 0 30px;
   }
 
   .hero-actions{
     display:flex;
     align-items:center;
+    justify-content:center;
     gap:14px;
     flex-wrap:wrap;
   }
@@ -622,67 +579,64 @@
     color:#12241A;
   }
 
-  /* Stakleno dugme - providno, sa zamućenjem fotografije ispod. */
-  .hero .btn-glass{
+  /* Sporedno dugme - providno sa svetlim obrisom, bez zamućenja. */
+  .hero .btn-outline-light{
     display:inline-flex;
     align-items:center;
     gap:10px;
-    background:rgba(255,255,255,0.13);
-    border:1px solid rgba(255,255,255,0.34);
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.55);
     color:#FFFFFF;
-    padding:16px 24px;
-    -webkit-backdrop-filter:blur(12px) saturate(1.1);
-    backdrop-filter:blur(12px) saturate(1.1);
+    padding:16px 26px;
   }
 
-  .hero .btn-glass:hover{
-    background:rgba(255,255,255,0.24);
-    border-color:rgba(255,255,255,0.55);
+  .hero .btn-outline-light:hover{
+    background:rgba(255,255,255,0.14);
+    border-color:#FFFFFF;
     color:#FFFFFF;
   }
 
-  .hero .btn-glass svg{width:15px; height:15px; flex:none;}
+  .hero .btn-outline-light svg{width:15px; height:15px; flex:none;}
 
-  /* Stakleno dugme za skrol, u duhu okruglih kontrola sa reference. */
+  /* Strelica za skrol, centrirana pri dnu heroja. */
   .hero-scroll{
     position:absolute;
-    right:clamp(20px, 3vw, 52px);
-    bottom:clamp(28px, 6vh, 64px);
+    left:50%;
+    transform:translateX(-50%);
+    bottom:clamp(24px, 5vh, 48px);
     z-index:5;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:16px;
+    gap:12px;
   }
 
   .hero-scroll-line{
     width:1px;
-    height:64px;
+    height:46px;
     background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 100%);
   }
 
   .hero-scroll-btn{
-    width:58px;
-    height:58px;
+    width:46px;
+    height:46px;
     border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
     color:#FFFFFF;
-    background:rgba(255,255,255,0.13);
-    border:1px solid rgba(255,255,255,0.34);
-    -webkit-backdrop-filter:blur(12px) saturate(1.1);
-    backdrop-filter:blur(12px) saturate(1.1);
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.45);
     transition:background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
   .hero-scroll-btn:hover{
-    background:rgba(255,255,255,0.26);
-    border-color:rgba(255,255,255,0.55);
+    background:rgba(255,255,255,0.16);
+    border-color:#FFFFFF;
     transform:translateY(4px);
   }
 
-  .hero-scroll-btn svg{width:20px; height:20px;}
+  .hero-scroll-btn svg{width:18px; height:18px;}
 
   .placeholder{
     background:var(--ph-bg);
@@ -714,33 +668,16 @@
     object-fit:cover;
   }
 
-  /* Na užim ekranima nema podele: panel prekriva celu širinu, naslov je beo i prelama se. */
   @media (max-width:900px){
     .hero{
-      min-height:clamp(460px, 74vh, 640px);
-      padding-top:64px;
-      padding-bottom:64px;
+      min-height:clamp(480px, 78vh, 660px);
+      padding-top:140px;
+      padding-bottom:72px;
     }
-    .hero{padding-top:150px;}
-    .hero-panel{
-      width:100%;
-      border-right:none;
-      box-shadow:none;
-      -webkit-backdrop-filter:blur(14px) saturate(1.1);
-      backdrop-filter:blur(14px) saturate(1.1);
-      background:linear-gradient(180deg, rgba(9,22,15,0.66) 0%, rgba(9,22,15,0.52) 50%, rgba(9,22,15,0.80) 100%);
-    }
-    .hero-panel::after{display:none;}
-    .hero-scroll{display:none;}
-    .hero-content-bright{display:none;}
-    .hero-copy{max-width:100%;}
-    .ht-big{
-      white-space:normal;
-      font-size:clamp(2.4rem, 11vw, 4rem);
-      color:#FFFFFF;
-    }
+    .ht-big{font-size:clamp(2.2rem, 9.5vw, 3.4rem);}
     .ht-small{font-size:1.05rem; max-width:34ch;}
     .hero-sub{font-size:1rem;}
+    .hero-scroll{display:none;}
   }
 
   /* TRAKA U POKRETU (ispod heroja) */
@@ -912,11 +849,12 @@
     align-items:center;
   }
 
-  .resenje-image{height:340px;}
+  /* Uspravni kadar traži viši okvir, da oblikovana forma stane u sliku. */
+  .resenje-image{height:430px;}
 
   @media (max-width:768px){
     .resenje-grid{grid-template-columns:1fr;}
-    .resenje-image{height:240px; order:2;}
+    .resenje-image{height:300px; order:2;}
     .resenje-text{order:1;}
   }
 
@@ -928,12 +866,13 @@
     align-items:center;
   }
 
-  .kred-image{height:300px;}
+  .kred-image{height:460px;}
+  .kred-image .media{object-position:center 58%;}
 
   @media (max-width:768px){
     .kred-grid{grid-template-columns:1fr;}
     .kred-text{order:1;}
-    .kred-image{order:2; height:220px;}
+    .kred-image{order:2; height:320px;}
   }
 
   /* BENEFITI */
@@ -1581,12 +1520,10 @@
 </div>
 
 <section class="hero" id="pocetna">
-  <img class="hero-bg" src="assets/hero-busen.jpg" width="1674" height="939" fetchpriority="high" decoding="async"
-       alt="Ruke pritiskaju busen travnjaka na sveže pripremljenu zemlju">
-  <div class="hero-panel" aria-hidden="true"></div>
+  <img class="hero-bg" src="assets/hero-imanje.jpg" width="1206" height="1451" fetchpriority="high" decoding="async"
+       alt="Pogled iz vazduha na uređeno imanje sa travnjakom, drvoredom i oblikovanim zelenilom">
   <div class="hero-veil" aria-hidden="true"></div>
 
-  <!-- Beli sloj naslova pravi se kloniranjem ovog bloka, pa se tekst menja samo ovde. -->
   <div class="hero-content">
     <div class="wrap">
       <div class="hero-copy">
@@ -1598,7 +1535,7 @@
         <p class="hero-sub">Projektujem i uređujem vrtove i zelene površine za kuće, vile, vikendice i poslovne objekte - od prve ideje, preko 3D vizualizacije, do zasađene poslednje biljke.</p>
         <div class="hero-actions">
           <a href="#kontakt" class="btn">Zatraži ponudu za svoj vrt</a>
-          <a href="#dokazi" class="btn btn-glass">
+          <a href="#dokazi" class="btn btn-outline-light">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
             Pogledaj radove
           </a>
@@ -1685,8 +1622,8 @@
     <span class="eyebrow">Rešenje</span>
     <div class="resenje-grid">
       <div class="media-frame resenje-image">
-        <img class="media" src="assets/resenje-zasad.jpg" width="794" height="1400" loading="lazy" decoding="async"
-             alt="Ulazni plato sa okruglim žardinjerama i oblikovanim zelenilom">
+        <img class="media" src="assets/resenje-forme.jpg" width="942" height="1213" loading="lazy" decoding="async"
+             alt="Oblikovana četinarska forma sa kuglama šimšira i žardinjerama uz zid">
       </div>
       <div class="resenje-text">
         <h2 class="section-title">Tu prestaje nagađanje, počinje plan</h2>
@@ -1707,8 +1644,8 @@
         <p>Svaki predlog biljaka i materijala biram prema tlu, klimi i osvetljenju konkretnog prostora, ne po trenutnom trendu, tako da vrt izgleda dobro i za pet godina, ne samo prvog proleća.</p>
       </div>
       <div class="media-frame kred-image">
-        <img class="media" src="assets/kredibilitet-zasad.jpg" width="942" height="1162" loading="lazy" decoding="async"
-             alt="Zasad uz fasadu objekta - drvo u krošnji, šimšir i lavanda">
+        <img class="media" src="assets/kredibilitet-spirale.jpg" width="921" height="1577" loading="lazy" decoding="async"
+             alt="Dve tuje oblikovane u spiralu, zasađene uz zid ulazne zone">
       </div>
     </div>
   </div>
@@ -2133,24 +2070,6 @@
       observer.observe(box);
     }
   });
-
-  /* HERO - beli sloj naslova preko oštre strane fotografije.
-     Kloniramo ceo blok da bi se slova poklopila u piksel; kopija se seče
-     desno od granice panela, pa se od nje vidi samo deo naslova. */
-  (function(){
-    const hero = document.querySelector('.hero');
-    const content = hero && hero.querySelector('.hero-content');
-    if(!hero || !content){ return; }
-    if(!window.matchMedia('(min-width:901px)').matches){ return; }
-
-    const bright = content.cloneNode(true);
-    bright.classList.add('hero-content-bright');
-    bright.setAttribute('aria-hidden', 'true');
-    bright.querySelectorAll('a, button, input').forEach(function(el){
-      el.setAttribute('tabindex', '-1');
-    });
-    content.parentNode.insertBefore(bright, content.nextSibling);
-  })();
 
   /* RECENZIJE - traka koja polako klizi, sa fokusom na pojedinačnu karticu */
   (function(){
