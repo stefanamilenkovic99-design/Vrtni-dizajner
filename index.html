@@ -460,8 +460,9 @@
     justify-content:center;
     text-align:center;
     min-height:clamp(620px, 92vh, 900px);
-    padding-top:166px;
-    padding-bottom:88px;
+    /* Isti razmak gore i dole, da sadržaj stoji tačno u sredini heroja. */
+    padding-top:120px;
+    padding-bottom:120px;
     overflow:hidden;
     background:#0F1A13;
     border-bottom:1px solid var(--border);
@@ -519,42 +520,24 @@
     flex:none;
   }
 
+  /* Kratak naslov; max-width u "ch" ga drži u dva reda. */
   .hero-title{
-    margin-bottom:26px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-  }
-
-  .ht-big{
-    display:block;
-    font-size:clamp(2.6rem, 6.4vw, 5.4rem);
-    line-height:1.02;
+    max-width:15ch;
+    margin:0 auto 26px;
+    font-size:clamp(2.6rem, 6.2vw, 5rem);
+    line-height:1.05;
     letter-spacing:-0.01em;
     text-transform:uppercase;
     color:#FFFFFF;
     text-shadow:0 2px 30px rgba(0,0,0,0.45);
   }
 
-  .ht-small{
-    display:block;
-    font-family:var(--font-body);
-    font-weight:400;
-    font-size:clamp(1.05rem, 1.5vw, 1.35rem);
-    line-height:1.4;
-    letter-spacing:0.01em;
-    color:rgba(255,255,255,0.94);
-    max-width:32ch;
-    text-shadow:0 1px 18px rgba(0,0,0,0.45);
-  }
-
   .hero-sub{
     color:rgba(255,255,255,0.86);
     font-size:1.06rem;
-    max-width:58ch;
+    max-width:56ch;
     text-shadow:0 1px 16px rgba(0,0,0,0.45);
-    margin:0 0 30px;
+    margin:0 auto 32px;
   }
 
   .hero-actions{
@@ -598,46 +581,6 @@
 
   .hero .btn-outline-light svg{width:15px; height:15px; flex:none;}
 
-  /* Strelica za skrol, centrirana pri dnu heroja. */
-  .hero-scroll{
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    bottom:clamp(24px, 5vh, 48px);
-    z-index:5;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-  }
-
-  .hero-scroll-line{
-    width:1px;
-    height:46px;
-    background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 100%);
-  }
-
-  .hero-scroll-btn{
-    width:46px;
-    height:46px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#FFFFFF;
-    background:transparent;
-    border:1px solid rgba(255,255,255,0.45);
-    transition:background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-  }
-
-  .hero-scroll-btn:hover{
-    background:rgba(255,255,255,0.16);
-    border-color:#FFFFFF;
-    transform:translateY(4px);
-  }
-
-  .hero-scroll-btn svg{width:18px; height:18px;}
-
   .placeholder{
     background:var(--ph-bg);
     border:1px dashed var(--ph-border);
@@ -674,10 +617,8 @@
       padding-top:140px;
       padding-bottom:72px;
     }
-    .ht-big{font-size:clamp(2.2rem, 9.5vw, 3.4rem);}
-    .ht-small{font-size:1.05rem; max-width:34ch;}
+    .hero-title{font-size:clamp(2.2rem, 9.5vw, 3.4rem);}
     .hero-sub{font-size:1rem;}
-    .hero-scroll{display:none;}
   }
 
   /* TRAKA U POKRETU (ispod heroja) */
@@ -707,10 +648,9 @@
   .ticker-track{
     display:flex;
     width:max-content;
-    animation:ticker-slide 36s linear infinite;
+    /* Neprekidno kruženje - dva ista seta i pomeraj za tačno pola staze. */
+    animation:ticker-slide 46s linear infinite;
   }
-
-  .ticker:hover .ticker-track{animation-play-state:paused;}
 
   @keyframes ticker-slide{
     from{transform:translateX(0);}
@@ -720,26 +660,30 @@
   .ticker-set{
     display:flex;
     align-items:center;
-    padding:18px 0;
+    padding:22px 0;
   }
 
   .ticker-item{
     display:flex;
     align-items:center;
-    gap:12px;
-    padding:0 34px;
+    gap:14px;
+    padding:0 60px;
   }
 
+  /* Cela traka je u jednom fontu, broj se izdvaja samo veličinom i debljinom. */
   .ticker-num{
-    font-family:var(--font-head);
-    font-size:1.65rem;
+    font-family:var(--font-body);
+    font-size:1.45rem;
     line-height:1;
     font-weight:600;
+    letter-spacing:0.01em;
     white-space:nowrap;
   }
 
   .ticker-label{
-    font-size:0.74rem;
+    font-family:var(--font-body);
+    font-size:0.76rem;
+    font-weight:400;
     letter-spacing:0.14em;
     text-transform:uppercase;
     line-height:1.3;
@@ -756,9 +700,9 @@
   }
 
   @media (max-width:768px){
-    .ticker-item{padding:0 22px; gap:10px;}
-    .ticker-num{font-size:1.35rem;}
-    .ticker-label{font-size:0.68rem;}
+    .ticker-item{padding:0 34px; gap:12px;}
+    .ticker-num{font-size:1.25rem;}
+    .ticker-label{font-size:0.7rem;}
     .ticker::before, .ticker::after{width:44px;}
   }
 
@@ -1528,10 +1472,7 @@
     <div class="wrap">
       <div class="hero-copy">
         <span class="hero-eyebrow">Pejzažni dizajn i uređenje</span>
-        <h1 class="hero-title">
-          <span class="ht-big">Vrt iz snova</span>
-          <span class="ht-small">bez godina pokušaja i skupih grešaka</span>
-        </h1>
+        <h1 class="hero-title">Vrt iz snova, bez skupih grešaka</h1>
         <p class="hero-sub">Projektujem i uređujem vrtove i zelene površine za kuće, vile, vikendice i poslovne objekte - od prve ideje, preko 3D vizualizacije, do zasađene poslednje biljke.</p>
         <div class="hero-actions">
           <a href="#kontakt" class="btn">Zatraži ponudu za svoj vrt</a>
@@ -1544,12 +1485,6 @@
     </div>
   </div>
 
-  <div class="hero-scroll">
-    <span class="hero-scroll-line" aria-hidden="true"></span>
-    <a href="#problem" class="hero-scroll-btn" aria-label="Idi na sledeću sekciju">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
-    </a>
-  </div>
 </section>
 
 <!-- TRAKA U POKRETU -->
