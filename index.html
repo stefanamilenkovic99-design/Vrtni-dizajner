@@ -475,7 +475,7 @@
     height:100%;
     object-fit:cover;
     /* Isečak pomeren naniže, da u kadar uđu i dvorište i travnjak. */
-    object-position:center 62%;
+    object-position:center 80%;
     z-index:0;
   }
 
@@ -793,12 +793,11 @@
     align-items:center;
   }
 
-  /* Uspravni kadar traži viši okvir, da oblikovana forma stane u sliku. */
-  .resenje-image{height:430px;}
+  .resenje-image{height:340px;}
 
   @media (max-width:768px){
     .resenje-grid{grid-template-columns:1fr;}
-    .resenje-image{height:300px; order:2;}
+    .resenje-image{height:240px; order:2;}
     .resenje-text{order:1;}
   }
 
@@ -810,13 +809,12 @@
     align-items:center;
   }
 
-  .kred-image{height:460px;}
-  .kred-image .media{object-position:center 58%;}
+  .kred-image{height:300px;}
 
   @media (max-width:768px){
     .kred-grid{grid-template-columns:1fr;}
     .kred-text{order:1;}
-    .kred-image{order:2; height:320px;}
+    .kred-image{order:2; height:220px;}
   }
 
   /* BENEFITI */
@@ -1032,19 +1030,10 @@
   .reviews .section-title{color:var(--header-text);}
   .reviews .section-intro{color:var(--header-muted);}
 
-  /* Traka je široka koliko i ekran, ne koliko kontejner. */
   .rev-mask{
     position:relative;
     overflow:hidden;
-    width:100%;
     padding:30px 0 26px;
-    touch-action:pan-y;
-  }
-
-  /* Kartice se stapaju sa pozadinom na levoj i desnoj ivici ekrana. */
-  .rev-fade{
-    -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
-    mask-image:linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
   }
 
   .rev-track{
@@ -1140,7 +1129,7 @@
   .rev-hint svg{width:16px; height:16px; flex:none;}
 
   @media (max-width:768px){
-    .rev-fade{-webkit-mask-image:none; mask-image:none;}
+    .rev-mask{width:100vw; margin-left:calc(-50vw + 50%); padding-left:20px; padding-right:20px; touch-action:pan-y;}
     .rev-card{flex:0 0 78vw;}
     .rev-arrow{width:42px; height:42px; font-size:19px;}
     .rev-prev{left:12px;}
@@ -1719,13 +1708,9 @@
     <span class="eyebrow">Recenzije</span>
     <h2 class="section-title">Šta kažu klijenti</h2>
     <p class="section-intro">Ljudi koji su svoje dvorište, terasu ili ulaz u objekat prepustili meni, i danas ih koriste svaki dan.</p>
-  </div>
-
-  <!-- Traka ide od ivice do ivice ekrana, van kontejnera. -->
-  <div class="rev-mask">
-    <button type="button" class="rev-arrow rev-prev" aria-label="Prethodna recenzija">&lsaquo;</button>
-    <button type="button" class="rev-arrow rev-next" aria-label="Sledeća recenzija">&rsaquo;</button>
-    <div class="rev-fade">
+    <div class="rev-mask">
+      <button type="button" class="rev-arrow rev-prev" aria-label="Prethodna recenzija">&lsaquo;</button>
+      <button type="button" class="rev-arrow rev-next" aria-label="Sledeća recenzija">&rsaquo;</button>
       <div class="rev-track">
         <div class="rev-card">
           <div class="rev-stars" aria-label="Ocena 5 od 5">★★★★★</div>
@@ -1749,9 +1734,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="wrap">
     <div class="rev-hint">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l-5 6 5 6"/><path d="M15 6l5 6-5 6"/></svg>
       <span>Pređi mišem preko recenzija (ili dodirni na telefonu) da zaustaviš kretanje i pročitaš ih strelicama.</span>
